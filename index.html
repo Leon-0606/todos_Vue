@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Template • TodoMVC</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/index.css" />
+  </head>
+  <body>
+    <section class="todoapp">
+      <header class="header">
+        <h1>todos</h1>
+        <input
+          class="new-todo"
+          v-model="iptValue"
+          @keyup.enter="add"
+          placeholder="What needs to be done?"
+          autofocus
+        />
+      </header>
+      <!-- This section should be hidden by default and shown when there are todos -->
+      <section class="main">
+        <input id="toggle-all" v-model="all" class="toggle-all" type="checkbox" />
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list">
+          <!-- These are here just to show the structure of the list items -->
+          <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
+          <li :class="{completed:item.flag,editing:currentId===item.id}" v-for="item in changeList">
+            <div class="view">
+              <input
+                class="toggle"
+                @change="changeState(item)"
+                type="checkbox"
+                v-model="item.flag"
+              />
+              <label @dblclick="dblclick(item.id)">{{item.name}}</label>
+              <button class="destroy" @click="del(item.id)"></button>
+            </div>
+            <input class="edit" v-model="item.name" @keyup.enter="finish(item)" />
+          </li>
+        </ul>
+      </section>
+      <!-- This footer should hidden by default and shown when there are todos -->
+      <footer class="footer">
+        <!-- This should be `0 items left` by default -->
+        <span class="todo-count"><strong>{{total}}</strong> item left</span>
+        <!-- Remove this if you don't implement routing -->
+        <ul class="filters">
+          <li>
+            <a
+              :class="{selected:btnIdx===index}"
+              href="#/"
+              @click="click(index)"
+              v-for="(item,index) in filters"
+              >{{item}}</a
+            >
+          </li>
+        </ul>
+        <!-- Hidden if no completed items are left ↓ -->
+        <button class="clear-completed" v-show="isShow" @click="remove">Clear completed</button>
+      </footer>
+    </section>
+    <script src="./node_modules/axios/dist/axios.js"></script>
+    <script src="./js/vue.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
